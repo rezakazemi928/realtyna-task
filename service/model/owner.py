@@ -9,6 +9,7 @@ class Owner(db.Model):
     registered_date = db.Column(
         db.DateTime(timezone=True), nullable=False, default=func.now()
     )
+    
     def __repr__(self) -> str:
         return f"<{self.username}>"
     
