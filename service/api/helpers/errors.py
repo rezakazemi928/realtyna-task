@@ -3,3 +3,6 @@ class IdIsNotValid(Exception):
 
 class UserNotFound(Exception):
     pass
+
+class ReservationNotFound(Exception):
+    pass

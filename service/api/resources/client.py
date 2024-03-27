@@ -34,7 +34,7 @@ class ClientResource(Resource):
 
 
 
-class ClientResourceID(Resource):
+class ClientIDResource(Resource):
     @classmethod
     def get(cls, id):
         if id is None:

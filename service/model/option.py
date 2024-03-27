@@ -30,7 +30,7 @@ class ClientReservationList(db.Model):
         lazy=True,
         passive_deletes=True,
     )
-    client = db.relationship(
+    option = db.relationship(
         "ReserveOption",
         backref="option",
         lazy=True,
