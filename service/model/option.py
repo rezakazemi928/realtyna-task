@@ -9,6 +9,7 @@ class ReserveOption(db.Model):
     expired_date = db.Column(db.DateTime(timezone=True), nullable=True)
     client_id = db.Column(db.Integer, db.ForeignKey("client.id", ondelete="SET NULL"))
     version = db.Column(db.Integer, nullable=False, default=1)
+    owner_id = db.Column(db.Integer, db.ForeignKey("owner.id", ondelete="CASCADE"), nullable=False)
     
     def __repr__(self) -> str:
         return f"<{self.option_type}>"
