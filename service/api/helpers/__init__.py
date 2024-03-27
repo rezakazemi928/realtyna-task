@@ -1,8 +1,10 @@
 from api.helpers.apis import handle_error_response
 from api.helpers.errors import IdIsNotValid, UserNotFound
+from api.helpers.database import check_reserved_date
 
 __all__ = [
     "handle_error_response",
     "IdIsNotValid",
-    "UserNotFound"
+    "UserNotFound",
+    "check_reserved_date"
 ]
