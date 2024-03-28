@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Union
 
-from model import ClientReservationList
+from model import Client, ClientReservationList
 
 
 def check_reserved_date(
@@ -20,3 +20,13 @@ def check_reserved_date(
         ClientReservationList.id == id,
     ).first()
     return matching_reservations
+
+
+def filter_reservations_by_username(username: str, db):
+    query = (
+        db.session.query(ClientReservationList)
+        .select_from(Client)
+        .outerjoin(ClientReservationList, ClientReservationList.client_id == Client.id)
+        .filter(Client.username.ilike(f"%{username}%"))
+    )
+    return query

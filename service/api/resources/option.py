@@ -1,4 +1,9 @@
-from api.helpers import InvalidRequestArgs, ReservationNotFound
+from api.helpers import (
+    InvalidRequestArgs,
+    ReservationNotFound,
+    filter_reservations_by_username,
+    paginate,
+)
 from extensions import db
 from flask import Response, jsonify, request
 from flask_restful import Resource
@@ -40,9 +45,17 @@ class ClientReservationListResource(Resource):
 
     @classmethod
     def get(cls):
+        args = request.args
+        username = args.get("username")
         schema = ClientReservationListSchema(many=True)
-        reservations_list = ClientReservationList.query.all()
-        return jsonify(schema.dump(reservations_list))
+        print(username)
+        if username is None:
+            query = ClientReservationList.query
+
+        else:
+            query = filter_reservations_by_username(username=username, db=db)
+
+        return paginate(query=query, schema=schema)
 
 
 class ClientReservationListIDResource(Resource):
