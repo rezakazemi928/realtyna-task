@@ -1,5 +1,5 @@
 from api.helpers.apis import handle_error_response, write_into_file
-from api.helpers.database import check_reserved_date, filter_reservations_by_username
+from api.helpers.database import ReservationListSearch, check_reserved_date
 from api.helpers.errors import (
     IdIsNotValid,
     InvalidRequestArgs,
@@ -18,6 +18,6 @@ __all__ = [
     "InvalidRequestArgs",
     "InvalidString",
     "paginate",
-    "filter_reservations_by_username",
     "write_into_file",
+    "ReservationListSearch",
 ]

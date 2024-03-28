@@ -22,11 +22,34 @@ def check_reserved_date(
     return matching_reservations
 
 
-def filter_reservations_by_username(username: str, db):
-    query = (
-        db.session.query(ClientReservationList)
-        .select_from(Client)
-        .outerjoin(ClientReservationList, ClientReservationList.client_id == Client.id)
-        .filter(Client.username.ilike(f"%{username}%"))
-    )
-    return query
+class ReservationListSearch:
+    def __init__(self, args, db) -> None:
+        self.args = args
+        self.db = db
+
+    def set_base_query(self):
+        self.query = (
+            self.db.session.query(ClientReservationList)
+            .select_from(Client)
+            .outerjoin(
+                ClientReservationList, ClientReservationList.client_id == Client.id
+            )
+        )
+
+    def filter_reservations_by_username(self):
+        if self.args.get("username"):
+            username = self.args.get("username")
+            self.query = self.query.filter(Client.username.ilike(f"%{username}%"))
+
+    def filter_by_timeline(self):
+        started_date = self.args.get("started_date")
+        end_date = self.args.get("end_date")
+        if started_date is not None and end_date is not None:
+            started_date = datetime.strptime(started_date, "%Y-%m-%dT%H:%M:%S.%f")
+            end_date = datetime.strptime(end_date, "%Y-%m-%dT%H:%M:%S.%f")
+            self.query = self.query.filter(
+                (ClientReservationList.reserved_date > end_date)
+                | (ClientReservationList.expired_date < started_date)
+            )
+
+        return self.query

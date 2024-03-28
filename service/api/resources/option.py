@@ -3,8 +3,8 @@ import random
 
 from api.helpers import (
     InvalidRequestArgs,
+    ReservationListSearch,
     ReservationNotFound,
-    filter_reservations_by_username,
     paginate,
     write_into_file,
 )
@@ -50,14 +50,12 @@ class ClientReservationListResource(Resource):
     @classmethod
     def get(cls):
         args = request.args
-        username = args.get("username")
+        search_helper = ReservationListSearch(args=args, db=db)
+        search_helper.set_base_query()
+        search_helper.filter_reservations_by_username()
+        query = search_helper.filter_by_timeline()
+
         schema = ClientReservationListSchema(many=True)
-        if username is None:
-            query = ClientReservationList.query
-
-        else:
-            query = filter_reservations_by_username(username=username, db=db)
-
         paginated_date = paginate(query=query, schema=schema)
         if args.get("export") is not None:
             file_id = args.get("owner_id")

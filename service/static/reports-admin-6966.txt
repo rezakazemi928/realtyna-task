@@ -1,0 +1,44 @@
+{
+    "total_items": 2,
+    "pages": 1,
+    "page": 1,
+    "items": [
+        {
+            "id": 5,
+            "client": {
+                "username": "rezas13",
+                "id": 6
+            },
+            "option": {
+                "option_type": "room",
+                "owner": {
+                    "id": 1,
+                    "username": "rezas13"
+                },
+                "id": 10
+            },
+            "reserved_date": "2024-11-27T15:27:48.659128+00:00",
+            "expired_date": "2024-11-30T15:27:48.659128+00:00",
+            "version": 2
+        },
+        {
+            "id": 6,
+            "client": {
+                "username": "reza095",
+                "id": 8
+            },
+            "option": {
+                "option_type": "BMW-X6",
+                "owner": {
+                    "id": 1,
+                    "username": "rezas13"
+                },
+                "id": 11
+            },
+            "reserved_date": "2024-09-27T15:27:48.659128+00:00",
+            "expired_date": "2024-10-02T15:27:48.659128+00:00",
+            "version": 1
+        }
+    ],
+    "num_rows": 10
+}
