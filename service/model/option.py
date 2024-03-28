@@ -24,6 +24,7 @@ class ClientReservationList(db.Model):
     reserved_date = db.Column(db.DateTime(timezone=True), nullable=False)
     expired_date = db.Column(db.DateTime(timezone=True), nullable=False)
     currently_available = db.Column(db.Boolean, default=False, nullable=False)
+    version = db.Column(db.Integer, default=1, nullable=False, server_default="1")
     client = db.relationship(
         "Client",
         backref="client",

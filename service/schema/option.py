@@ -51,7 +51,8 @@ class ClientReservationListSchema(ma.SQLAlchemyAutoSchema):
         if reserved_datetime < current_datetime_utc:
             raise ValidationError("not a valid reserved date")
         
-        if check_reserved_date(input_time=reserved_datetime) is not None:
+        is_reserved = check_reserved_date(input_time=reserved_datetime, id=req["option"]["id"])
+        if is_reserved is not None:
             raise ValidationError("Already reserved")
         
         req["expired_date"] = (reserved_datetime + timedelta(days=req["expired_in"])).strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -74,7 +75,8 @@ class ClientReservationListUpdateSchema(ClientReservationListSchema):
         if reserved_datetime < current_datetime_utc:
             raise ValidationError("not a valid reserved date")
         
-        if check_reserved_date(input_time=reserved_datetime, id=req["id"]) is not None:
+        is_reserved = check_reserved_date(input_time=reserved_datetime, id=req["option"]["id"])
+        if is_reserved is not None:
             raise ValidationError("Already reserved")
         
         req["expired_date"] = (reserved_datetime + timedelta(days=req["expired_in"])).strftime("%Y-%m-%dT%H:%M:%S.%f")

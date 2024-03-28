@@ -3,7 +3,7 @@ from flask import request, jsonify, Response
 from schema import ReserveOptionSchema, ClientReservationListSchema, ClientReservationListUpdateSchema
 from extensions import db
 from model import ClientReservationList
-from api.helpers import ReservationNotFound
+from api.helpers import ReservationNotFound, InvalidRequestArgs
 
 
 class ReservationOptionResource(Resource):
@@ -26,7 +26,6 @@ class ClientReservationListResource(Resource):
         reservation_list = schema.load(req)
         db.session.add(reservation_list)
         db.session.commit()
-        
         return jsonify(schema.dump(reservation_list))
     
     @classmethod
@@ -48,16 +47,25 @@ class ClientReservationListIDResource(Resource):
     
     @classmethod
     def put(cls, id):
+        args = request.args
         req = request.json
-        req["id"] = id
-        reservation_list = ClientReservationList.query.get(id)
+        version = args.get("version")
+        if version is None:
+            raise InvalidRequestArgs("row version is not valid")
+        
+        reservation_list = ClientReservationList.query.filter(ClientReservationList.id == id, ClientReservationList.version == version).first()
         if reservation_list is None:
             raise ReservationNotFound("No reservation has been found.")
         
+        req["id"] = id
+        reservation_list.reserved_date = None
+        reservation_list.expired_date = None
+        db.session.flush()
+        
         schema = ClientReservationListUpdateSchema(partial=True)
         reservation_list = schema.load(req, instance=reservation_list)
+        reservation_list.version += 1
         db.session.commit()
-        
         return jsonify(schema.dump(reservation_list))
     
     

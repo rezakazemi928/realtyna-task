@@ -6,3 +6,6 @@ class UserNotFound(Exception):
 
 class ReservationNotFound(Exception):
     pass
+
+class InvalidRequestArgs(Exception):
+    pass
