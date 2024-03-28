@@ -101,7 +101,7 @@ class ClientReservationListUpdateSchema(ClientReservationListSchema):
             raise ValidationError("not a valid reserved date")
 
         is_reserved = check_reserved_date(
-            input_time=reserved_datetime, id=req["option"]["id"]
+            input_time=reserved_datetime, id=req["option_id"]
         )
         if is_reserved is not None:
             raise ValidationError("Already reserved")
@@ -110,5 +110,6 @@ class ClientReservationListUpdateSchema(ClientReservationListSchema):
             reserved_datetime + timedelta(days=req["expired_in"])
         ).strftime("%Y-%m-%dT%H:%M:%S.%f")
         del req["expired_in"]
+        del req["option_id"]
 
         return req

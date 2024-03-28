@@ -69,7 +69,11 @@ class ClientReservationListIDResource(Resource):
         if reservation_list is None:
             raise ReservationNotFound("No reservation has been found.")
 
-        req["id"] = id
+        # * we need option id in schema
+        req["option_id"] = id
+
+        # * flush the changes in order to change th reservation date.
+        # * it should not have any conflicts with the current situations
         reservation_list.reserved_date = None
         reservation_list.expired_date = None
         db.session.flush()

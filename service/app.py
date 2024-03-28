@@ -3,12 +3,13 @@ from os import getenv
 from api.helpers import (
     IdIsNotValid,
     InvalidRequestArgs,
+    InvalidString,
     ReservationNotFound,
     UserNotFound,
     handle_error_response,
 )
 from api.routes.blueprint import blueprint
-from configs import Development, Production
+from configs import Development
 from extensions import db, ma, migrate
 from flask import Flask, current_app
 from marshmallow import ValidationError
@@ -19,7 +20,6 @@ def create_app():
     app = Flask(__name__)
     app_env = getenv("FLASK_ENV", "production")
     config = {
-        "production": Production,
         "development": Development,
     }
     app.config.from_object(config[app_env])
@@ -67,6 +67,7 @@ def create_app():
 
     @app.errorhandler(IdIsNotValid)
     def handle_invalid_id(e):
+        current_app.logger.error(e)
         return handle_error_response(
             type="RequestError",
             code=13,
@@ -77,6 +78,7 @@ def create_app():
 
     @app.errorhandler(UserNotFound)
     def handle_not_found_user(e):
+        current_app.logger.error(e)
         return handle_error_response(
             type="RequestError",
             code=13,
@@ -87,6 +89,7 @@ def create_app():
 
     @app.errorhandler(InvalidRequestArgs)
     def handle_invalid_req_args(e):
+        current_app.logger.error(e)
         return handle_error_response(
             type="RequestArgsError",
             code=14,
@@ -97,6 +100,18 @@ def create_app():
 
     @app.errorhandler(ReservationNotFound)
     def handle_invalid_not_found_option(e):
+        current_app.logger.error(e)
+        return handle_error_response(
+            type="RequestError",
+            code=13,
+            sub_code=102,
+            status=400,
+            mimetype="application/json",
+        )
+
+    @app.errorhandler(InvalidString)
+    def handle_invalid_invalid_string(e):
+        current_app.logger.error(e)
         return handle_error_response(
             type="RequestError",
             code=13,

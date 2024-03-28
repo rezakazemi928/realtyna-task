@@ -17,7 +17,3 @@ class Development(Base):
         f"postgresql://{getenv('POSTGRES_USER')}:{getenv('POSTGRES_PASSWORD')}"
         f"@{getenv('POSTGRES_HOST')}:{getenv('POSTGRES_PORT')}/{getenv('POSTGRES_DB')}"
     )
-
-
-class Production(Base):
-    pass
