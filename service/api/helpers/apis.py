@@ -26,3 +26,9 @@ def handle_error_response(
     """
     err = json.dumps({"type": type, "code": code, "subcode": sub_code, "msg": msg})
     return Response(err, status=status, mimetype=mimetype)
+
+
+def write_into_file(location, content):
+    with open(location, "w") as file:
+        # formatted_json_str = json.dumps(paginated_date, indent=4)
+        file.write(content)

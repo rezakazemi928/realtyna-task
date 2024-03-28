@@ -1,8 +1,12 @@
+import json
+import random
+
 from api.helpers import (
     InvalidRequestArgs,
     ReservationNotFound,
     filter_reservations_by_username,
     paginate,
+    write_into_file,
 )
 from extensions import db
 from flask import Response, jsonify, request
@@ -48,14 +52,25 @@ class ClientReservationListResource(Resource):
         args = request.args
         username = args.get("username")
         schema = ClientReservationListSchema(many=True)
-        print(username)
         if username is None:
             query = ClientReservationList.query
 
         else:
             query = filter_reservations_by_username(username=username, db=db)
 
-        return paginate(query=query, schema=schema)
+        paginated_date = paginate(query=query, schema=schema)
+        if args.get("export") is not None:
+            file_id = args.get("owner_id")
+            if file_id is None:
+                file_id = random.randint(a=100, b=9999)
+
+            formatted_json_str = json.dumps(paginated_date, indent=4)
+            write_into_file(
+                location=f"static/reports-admin-{file_id}.txt",
+                content=formatted_json_str,
+            )
+
+        return paginated_date
 
 
 class ClientReservationListIDResource(Resource):
