@@ -17,3 +17,12 @@ class Development(Base):
         f"postgresql://{getenv('POSTGRES_USER')}:{getenv('POSTGRES_PASSWORD')}"
         f"@{getenv('POSTGRES_HOST')}:{getenv('POSTGRES_PORT')}/{getenv('POSTGRES_DB')}"
     )
+
+
+class Test(Base):
+    DEBUG = True
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = (
+        f"postgresql://{getenv('POSTGRES_USER')}:{getenv('POSTGRES_PASSWORD')}"
+        f"@{getenv('POSTGRES_HOST')}:{getenv('POSTGRES_PORT')}/{getenv('POSTGRES_TEST_PORT')}"
+    )

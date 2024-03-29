@@ -20,6 +20,25 @@ services:
     networks:
       - realtyna
 
+  db-test:
+    image: postgres:12.8-alpine3.14
+    container_name: realtyna-database-test
+    restart: always
+    user: root
+    environment:
+      - POSTGRES_PASSWORD=6o0fHIUW/9BApROyKXBmLg===
+      - POSTGRES_USER=root
+      - ports=5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5433:5432"
+    networks:
+      - realtyna
+
 networks:
   realtyna:
     external: true

@@ -1,11 +1,20 @@
+import re
+
 from api.helpers import InvalidString
 
 
 class StringValidator:
-    def check_empty_string(self, input_string: str, field_name):
-        """Check if string is empty or not."""
-        if not input_string or not input_string.strip():
-            raise InvalidString(f"Empty string is not valid for {field_name}.")
+    def __init__(self, field_name, input_string) -> None:
+        self.input_string = input_string
+        self.field_name = field_name
 
-        if input_string is None:
-            raise InvalidString(f"{field_name} cannot be none.")
+    def check_empty_string(self):
+        """Check if string is empty or not."""
+
+        if self.input_string is None:
+            raise InvalidString(f"{self.field_name} cannot be none.")
+
+        regex = r"^[^\s].*$"
+        # * if matched so the field is not empty
+        if not re.match(regex, self.input_string):
+            raise InvalidString(f"{self.field_name} cannot be none.")

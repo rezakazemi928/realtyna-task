@@ -9,20 +9,24 @@ from api.helpers import (
     handle_error_response,
 )
 from api.routes.blueprint import blueprint
-from configs import Development
+from configs import Development, Test
 from extensions import db, ma, migrate
 from flask import Flask, current_app
 from marshmallow import ValidationError
 from sqlalchemy import exc
 
 
-def create_app():
+def create_app(testing=True):
     app = Flask(__name__)
-    app_env = getenv("FLASK_ENV", "production")
+    app_env = getenv("FLASK_ENV", "development")
     config = {
         "development": Development,
     }
-    app.config.from_object(config[app_env])
+    if testing:
+        app.config.from_object(Test)
+
+    else:
+        app.config.from_object(config[app_env])
 
     db.init_app(app)
     ma.init_app(app)

@@ -15,6 +15,7 @@ flask-migrate = "*"
 flask-restful = "*"
 marshmallow-sqlalchemy = "*"
 pre-commit = "*"
+pytest = "*"
 
 [dev-packages]
 

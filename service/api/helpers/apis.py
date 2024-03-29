@@ -29,6 +29,11 @@ def handle_error_response(
 
 
 def write_into_file(location, content):
+    """write something in a file
+
+    Args:
+        location (_type_): _description_
+        content (_type_): _description_
+    """
     with open(location, "w") as file:
-        # formatted_json_str = json.dumps(paginated_date, indent=4)
         file.write(content)
