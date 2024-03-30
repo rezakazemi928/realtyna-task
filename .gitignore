@@ -11,6 +11,7 @@ FleetDm-Automation/conf/tls/*
 *.crt
 *.key
 # Distribution / packaging
+*.txt
 *.deb
 *.pkg
 *.msi
