@@ -16,6 +16,7 @@ flask-restful = "*"
 marshmallow-sqlalchemy = "*"
 pre-commit = "*"
 pytest = "*"
+coverage = "*"
 
 [dev-packages]
 

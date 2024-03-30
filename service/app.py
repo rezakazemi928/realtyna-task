@@ -9,21 +9,20 @@ from api.helpers import (
     handle_error_response,
 )
 from api.routes.blueprint import blueprint
-from configs import Development, Test
+from configs import Development, TestConfig
 from extensions import db, ma, migrate
 from flask import Flask, current_app
 from marshmallow import ValidationError
 from sqlalchemy import exc
 
 
-def create_app(testing=True):
+def create_app(testing=False):
     app = Flask(__name__)
     app_env = getenv("FLASK_ENV", "development")
-    config = {
-        "development": Development,
-    }
+    config = {"development": Development, "test": TestConfig}
+    print(TestConfig.SQLALCHEMY_DATABASE_URI)
     if testing:
-        app.config.from_object(Test)
+        app.config.from_object(config["test"])
 
     else:
         app.config.from_object(config[app_env])
@@ -46,7 +45,7 @@ def create_app(testing=True):
             code=11,
             sub_code=10,
             status=400,
-            msg=e.message,
+            msg=e.messages,
             mimetype="application/json",
         )
 
@@ -109,7 +108,7 @@ def create_app(testing=True):
             type="RequestError",
             code=13,
             sub_code=102,
-            status=400,
+            status=404,
             mimetype="application/json",
         )
 

@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Union
 
 from model import Client, ClientReservationList
+from sqlalchemy import and_
 
 
 def check_reserved_date(
@@ -14,10 +15,13 @@ def check_reserved_date(
         id (int): reservation id
 
     """
+    print(id)
     matching_reservations = ClientReservationList.query.filter(
-        ClientReservationList.reserved_date <= input_time,
-        ClientReservationList.expired_date >= input_time,
-        ClientReservationList.id == id,
+        and_(
+            ClientReservationList.id == id,
+            ClientReservationList.reserved_date <= input_time,
+            ClientReservationList.expired_date >= input_time,
+        )
     ).first()
     return matching_reservations
 

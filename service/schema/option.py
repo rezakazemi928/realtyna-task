@@ -100,9 +100,11 @@ class ClientReservationListUpdateSchema(ClientReservationListSchema):
         if reserved_datetime < current_datetime_utc:
             raise ValidationError("not a valid reserved date")
 
+        print(reserved_datetime)
         is_reserved = check_reserved_date(
             input_time=reserved_datetime, id=req["option_id"]
         )
+        print(is_reserved)
         if is_reserved is not None:
             raise ValidationError("Already reserved")
 

@@ -28,9 +28,9 @@ class ReservationOptionResource(Resource):
         option = schema.load(req)
         db.session.add(option)
         db.session.commit()
-
         return jsonify(schema.dump(option))
 
+    @classmethod
     def get(cls):
         options = ReserveOption.query.all()
         schema = ReserveOptionSchema(many=True)
@@ -74,11 +74,14 @@ class ClientReservationListResource(Resource):
 class ClientReservationListIDResource(Resource):
     @classmethod
     def get(cls, id):
-        reservation_list = ClientReservationList.query.get(id)
+        reservation_list = ClientReservationList.query.filter(
+            ClientReservationList.id == id
+        ).first()
         if reservation_list is None:
             raise ReservationNotFound("No reservation had found based on this id")
 
-        schema = ClientReservationListSchema(partial=True)
+        schema = ClientReservationListSchema()
+        print(reservation_list)
         return jsonify(schema.dump(reservation_list))
 
     @classmethod
